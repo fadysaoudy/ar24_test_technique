@@ -1,23 +1,29 @@
 @extends('layouts.app')
 
 @section('create_user_form')
+    @dump($errors)
     <div class="container w-50">
-        <form class="mx-auto my-5">
+        <form class="mx-auto my-5" method="POST" action="{{ route('user.store') }}">
+            @CSRF
             <div class="mb-3">
                 <label for="firstname" class="form-label">First Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="firstname" required>
+                <input type="text" class="form-control" name="firstname" id="firstname" required>
             </div>
             <div class="mb-3">
                 <label for="lastname" class="form-label">Last Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="lastname" required>
+                <input type="text" class="form-control" name="lastname" id="lastname" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                <input type="email" class="form-control" id="email" required>
+                <input type="email" class="form-control" name="email" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="billing_email" class="form-label">Billing Email <span class="text-danger">*</span></label>
+                <input type="billing_email" class="form-control" name="billing_email" id="billing_email" required>
             </div>
             <div class="mb-3">
                 <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
-                <select class="form-select" id="gender" required>
+                <select class="form-select" id="gender" name="gender" required>
                     <option value=""></option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -26,7 +32,7 @@
             </div>
             <div class="mb-3">
                 <label for="statut" class="form-label">Status <span class="text-danger">*</span></label>
-                <select class="form-select" id="statut" required>
+                <select class="form-select" id="statut" name="statut" required>
                     <option value=""></option>
                     <option value="particulier">Particulier</option>
                     <option value="professionnel">Professionnel</option>
@@ -34,35 +40,39 @@
             </div>
             <div class="mb-3">
                 <label for="company" class="form-label">Company Name</label>
-                <input type="text" class="form-control" id="company">
+                <input type="text" class="form-control" name="company" id="company">
             </div>
             <div class="mb-3">
                 <label for="company_siret" class="form-label">Company SIRET</label>
-                <input type="text" class="form-control" id="company_siret">
+                <input type="text" class="form-control" name="company_siret" id="company_siret">
             </div>
             <div class="mb-3">
                 <label for="company_tva" class="form-label">Company TVA</label>
-                <input type="text" class="form-control" id="company_tva">
+                <input type="text" name="company_tva" class="form-control" id="company_tva">
             </div>
             <div class="mb-3">
                 <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="country" required>
+                <input type="text" name="country" class="form-control" id="country" required>
             </div>
             <div class="mb-3">
                 <label for="address1" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="address1" required>
+                <input type="text" name="address1" class="form-control" id="address1" required>
             </div>
             <div class="mb-3">
                 <label for="address2" class="form-label">Address Line 2</label>
-                <input type="text" class="form-control" id="address2">
+                <input type="text" name="address2" class="form-control" id="address2">
             </div>
             <div class="mb-3">
                 <label for="zipcode" class="form-label">Zipcode<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="zipcode" required>
+                <input type="text" name="zipcode" class="form-control" id="zipcode" required>
             </div>
             <div class="mb-3">
                 <label for="city" class="form-label">City<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="city" required>
+                <input type="text" name="city" class="form-control" id="city" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
+                <input type="password" name="password" class="form-control" id="password" required>
             </div>
             <div class="mb-3">
                 <label for="confirmed" class="form-label">Ask email confirmation</label>
@@ -141,13 +151,13 @@
             <div class="mb-3">
                 <label for="notify_waiting_ar_answer" class="form-label">Send twice a week a list of waiting
                     sending</label>
-                <select class="form-select" id="notify_recipient_update" name="notify_recipient_update">
+                <select class="form-select" id="notify_waiting_ar_answer" name="notify_waiting_ar_answer">
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="is_legal_entity" class="form-label">Send twice a week a list of waiting sending</label>
+                <label for="notify_recipient_update" class="form-label">Send twice a week a list of waiting sending</label>
                 <select class="form-select" id="notify_recipient_update" name="notify_recipient_update">
                     <option value="0">No</option>
                     <option value="1">Yes</option>
@@ -155,7 +165,7 @@
             </div>
             <div class="mb-3">
                 <label for="is_legal_entity" class="form-label">Legal Entity</label>
-                <select class="form-select" id="is_legal_entity">
+                <select class="form-select" id="is_legal_entity" name="is_legal_entity">
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
