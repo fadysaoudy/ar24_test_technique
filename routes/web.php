@@ -23,6 +23,7 @@ Route::prefix('user')->group(function () {
     Route::get('/', [UsersController::class, 'index'])->name('user.index');
     Route::post('/store', [UsersController::class, 'store'])->name('user.store');
     Route::get('/show', [UsersController::class, 'show'])->name('user.show');
+    Route::get('/get', [UsersController::class, 'getUserByMail'])->name('user.get');
 
     //    user document
     Route::post('/document', [UserDocumentController::class, 'index'])->name('userDocument.store');

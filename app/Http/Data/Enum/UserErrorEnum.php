@@ -19,5 +19,8 @@ enum UserErrorEnum: string
     case ERROR_COMPANY_SIRET = 'error_company_siret';
     case USER_NOT_CREATED = 'user_not_created';
     case USER_UNAVAILABLE = 'user_unavailable';
+    case EMPTY_SIGNATURE = 'empty_signature';
+    case USER_NOT_EXIST = 'user_not_exist';
+
 
 }

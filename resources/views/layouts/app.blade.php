@@ -9,11 +9,26 @@
 <body class="d-flex flex-column min-vh-100">
 @include('partials.header')
 <main class="flex-fill">
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+
+    @endif
     @yield('create_user_form')
     @yield('show_user_form')
+    @yield('user_form')
     @yield('upload_document_form')
+    @yield('user_not_found')
+
 </main>
 @include('partials.footer')
+<script>
+    setTimeout(function() {
+        document.querySelector('.alert').remove();
+    }, 3000);
+</script>
 @stack('js')
 </body>
 </html>
