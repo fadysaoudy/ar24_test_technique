@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\DTO\User;
 
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
+
 class UserGetRequest extends Data
 {
     /**
@@ -22,6 +23,7 @@ class UserGetRequest extends Data
         $this->token = config('ar24.ar24_token');
         $this->date = Carbon::now()->addHours(2)->format('Y-m-d H:i:s');
     }
+
     public function toArray(): array
     {
         $data = parent::toArray();
@@ -32,11 +34,11 @@ class UserGetRequest extends Data
         return $data;
     }
 
-//    public function rules(): array
-//    {
-//        return [
-//            'user_id' => ['required_if:email,null'],
-//            'email' => ['required_if:user_id,null', 'email'],
-//        ];
-//    }
+    public static function rules(): array
+    {
+        return [
+            'user_id' => ['required_if:email,null'],
+            'email' => ['required_if:user_id,null', 'email'],
+        ];
+    }
 }

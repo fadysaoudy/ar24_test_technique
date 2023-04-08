@@ -5,8 +5,7 @@ namespace App\Contracts;
 use App\Http\Data\Enum\DateErrorEnum;
 use App\Http\Data\Enum\TokenErrorEnum;
 use App\Http\Data\Enum\UserErrorEnum;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserGetRequest;
+use App\Http\Requests\DTO\User\UserGetRequest;
 use Exception;
 
 interface HttpWrapperInterface
@@ -35,11 +34,16 @@ interface HttpWrapperInterface
     /**
      * @throws Exception
      */
-    public function post(string $endpoint, UserCreateRequest $data, array $headers): string;
+    public function post(string $endpoint, $request, array $headers): string;
 
     public static function makeSignature(string $date): bool|string;
 
     public function decrypt(string $encryptedContent, string $date): string;
 
     public function getExceptionMessage(string $slug): TokenErrorEnum|null|UserErrorEnum|DateErrorEnum;
+
+    public function prepareQuery($request): array;
+
+    public function handleJsonResponse($responseBody);
+    public function postAttachment($endpoint, $request, array $headers): string;
 }

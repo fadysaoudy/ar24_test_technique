@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\UserDocumentController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -25,9 +26,10 @@ Route::prefix('user')->group(function () {
     Route::get('/show', [UsersController::class, 'show'])->name('user.show');
     Route::get('/get', [UsersController::class, 'getUserByMail'])->name('user.get');
 
-    //    user document
-    Route::post('/document', [UserDocumentController::class, 'index'])->name('userDocument.store');
-    Route::get('/document', [UserDocumentController::class, 'store'])->name('userDocument.index');
+    Route::group(['prefix' => 'attachment'], function () {
+        Route::post('/upload', [AttachmentController::class, 'store'])->name('attachment.store');
+        Route::get('/', [AttachmentController::class, 'index'])->name('attachment.index');
+    });
 
     Route::post('/user-email', [UsersController::class, 'sendEmail'])->name('user.sendEmail');
     Route::get('/user-email/{mail_id}', [UsersController::class, 'receiveEmail'])->name('user.receiveEmail');

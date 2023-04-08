@@ -13,7 +13,9 @@
         "laravel/ui": "^4.2",
         "spatie/laravel-data": "^3.3",
         "ext-openssl": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-curl": "*",
+        "ext-http": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

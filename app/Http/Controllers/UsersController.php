@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use App\Contracts\UserServiceInterface;
 use App\Exceptions\UserAlreadyExistException;
 use App\Exceptions\UserNotFoundException;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserGetRequest;
+use App\Http\Requests\DTO\User\UserCreateRequest;
+use App\Http\Requests\DTO\User\UserGetRequest;
 use App\Providers\RouteServiceProvider;
 use Exception;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Redirect;
-use stdClass;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Session;
+use stdClass;
+
 class UsersController extends Controller
 {
 
@@ -72,14 +72,6 @@ class UsersController extends Controller
         return redirect()->intended(RouteServiceProvider::HOME)->with('success', 'User created successfully.');
     }
 
-    public function sendEmail(): View
-    {
-        return view('pages.users.index');
-    }
 
-    public function receiveEmail(): View
-    {
-        return view('pages.users.index');
-    }
 
 }

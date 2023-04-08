@@ -27,7 +27,7 @@
 <script>
     setTimeout(function() {
         document.querySelector('.alert').remove();
-    }, 3000);
+    }, 10000);
 </script>
 @stack('js')
 </body>

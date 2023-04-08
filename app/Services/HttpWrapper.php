@@ -9,9 +9,13 @@ use App\Http\Data\Enum\DateErrorEnum;
 use App\Http\Data\Enum\ResponseEnum;
 use App\Http\Data\Enum\TokenErrorEnum;
 use App\Http\Data\Enum\UserErrorEnum;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserGetRequest;
+use App\Http\Requests\DTO\User\UserGetRequest;
+use CURLFile;
 use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Utils;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class HttpWrapper implements HttpWrapperInterface
@@ -89,9 +93,8 @@ class HttpWrapper implements HttpWrapperInterface
             ->timeout($this->timeout)
             ->withOptions(['verify' => $this->verify])
             ->get($this->baseUrl . $endpoint, $params);
-        $content = $response->body();
-        $this->handleJsonResponse($content);
-        return $this->decrypt($content, $data->date);
+        return $response->body();
+
 
     }
 
@@ -99,24 +102,97 @@ class HttpWrapper implements HttpWrapperInterface
     /**
      * @throws Exception
      */
-    public function post($endpoint, UserCreateRequest $data, array $headers): string
+    public function post($endpoint, $request, array $headers): string
     {
         $response = Http::withHeaders($headers)
-            ->withHeaders(['signature' => $this->makeSignature($data->date)])
+            ->withHeaders(['signature' => $this->makeSignature($request->date)])
             ->timeout($this->timeout)
             ->withOptions([$this->verify])
-            ->withBody(http_build_query($data), 'application/x-www-form-urlencoded')
+            ->withBody(http_build_query($request), 'application/x-www-form-urlencoded')
             ->post($this->baseUrl . $endpoint);
+        return $response->body();
 
-        $content = $response->body();
 
-        $this->handleJsonResponse($content);
+    }
+//    public function postAttachment($endpoint, $request, array $headers): string
+//    {
+//        $client = new Client();
+//
+//        try {
+//            $response = $client->post('https://sandbox.ar24.fr/api/attachment', [
+//                'multipart' => [
+//                    [
+//                        'name' => 'token',
+//                        'contents' => $request->token
+//                    ],
+//                    [
+//                        'name' => 'date',
+//                        'contents' => $request->date
+//                    ],
+//                    [
+//                        'name' => 'id_user',
+//                        'contents' => $request->id_user
+//                    ],
+//                    [
+//                        'name' => 'file',
+//                        'contents' => fopen($request->file, 'r')
+//                    ]
+//                ],
+//                'headers' => [
+//                    'signature' => $this->makeSignature($request->date)
+//                ]
+//            ]);
+//
+//            dump( $response->getBody());
+//            dump($this->decrypt($response->getBody(),$request->date));
+//        } catch (RequestException $e) {
+//            echo $e->getMessage();
+//        }
+//
+//
+//return '';
+//
+//    }
+    public function postAttachment( $endpoint,  $request,  $headers): string
+    {
+        $client = new Client();
+        $signature = $this->makeSignature($request->date);
 
-        return $this->decrypt($content, $data->date);
+        try {
+            $response = $client->post($this->baseUrl . $endpoint, [
+                'multipart' => [
+                    [
+                        'name' => 'token',
+                        'contents' => $request->token
+                    ],
+                    [
+                        'name' => 'date',
+                        'contents' => $request->date
+                    ],
+                    [
+                        'name' => 'id_user',
+                        'contents' => $request->id_user
+                    ],
+                    [
+                        'name' => 'file',
+                        'contents' => fopen($request->file, 'r')
+                    ]
+                ],
+                'headers' => [
+                    'signature' => $signature
+                ]
+            ]);
+
+            dump($response->getBody());
+            dump($this->decrypt($response->getBody(), $request->date));
+        } catch (RequestException $e) {
+            echo $e->getMessage();
+        }
+        return  ' ';
     }
 
 
-    private function prepareQuery($request): array
+    public function prepareQuery($request): array
     {
 
         $id_user = $request->user_id;
@@ -141,7 +217,7 @@ class HttpWrapper implements HttpWrapperInterface
      * @throws UserAlreadyExistException
      * @throws Exception
      */
-    private function handleJsonResponse($responseBody): void
+    public function handleJsonResponse($responseBody): void
     {
 
         $jsonContent = json_decode($responseBody);
@@ -207,3 +283,11 @@ class HttpWrapper implements HttpWrapperInterface
 
 }
 
+//$response = Http::withHeaders([
+//    "accept: application/json",
+//    "content-type: application/json"
+//])->post('https://staging.consume.com/testing', $postArray)->json();
+//$response = Http::withHeaders([
+//    "accept" => "application/json",
+//    "content-type" => "application/json"
+//])->post('https://staging.consume.com/testing', $postArray)->json()

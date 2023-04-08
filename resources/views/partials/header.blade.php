@@ -17,7 +17,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('userDocument.index')}}">Upload Document</a>
+                    <a class="nav-link" href="{{route('attachment.index')}}">Upload Document</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Get Info by mail</a>
