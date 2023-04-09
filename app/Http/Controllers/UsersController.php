@@ -12,7 +12,6 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Session;
-use stdClass;
 
 class UsersController extends Controller
 {
@@ -24,17 +23,27 @@ class UsersController extends Controller
     {
     }
 
+    /**
+     * @return View
+     */
     public function index(): View
     {
         return view('pages.users.create');
     }
 
+    /**
+     * @return View
+     */
     public function show(): View
     {
         return view('pages.users.show');
     }
 
-    public function getUserByMail(UserGetRequest $request): View|string|stdClass
+    /**
+     * @param UserGetRequest $request
+     * @return View
+     */
+    public function getUserByMail(UserGetRequest $request): View
     {
         try {
             $user = $this->userService->get($request);
@@ -65,7 +74,6 @@ class UsersController extends Controller
 
         }
 
-        // Clear success message from session after 3 seconds
         Queue::later(10, function () {
             Session::forget('success');
         });

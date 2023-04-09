@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\ApiResponseHandlerInterface;
 use App\Contracts\HttpWrapperInterface;
 use App\Contracts\UserServiceInterface;
 use App\Exceptions\UserAlreadyExistException;
@@ -14,7 +15,7 @@ use stdClass;
 
 class UserService implements UserServiceInterface
 {
-    public function __construct(protected HttpWrapperInterface $httpWrapper)
+    public function __construct(protected HttpWrapperInterface $httpWrapper, protected ApiResponseHandlerInterface $responseHandler)
     {
 
     }
@@ -27,14 +28,14 @@ class UserService implements UserServiceInterface
 
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
         try {
-            $response = $this->httpWrapper->post('/user', $request, $headers);
-            $this->httpWrapper->handleJsonResponse($response);
-            $this->httpWrapper->decrypt($response, $request->date);
+            $this->httpWrapper->post('/user', $request, $headers);
+
         } catch (UserAlreadyExistException $e) {
 
             Log::error($e);
             throw UserAlreadyExistException::EmailExist();
         }
+
         catch (Exception $e) {
             Log::error($e);
             throw new Exception($e->getMessage());
@@ -52,7 +53,7 @@ class UserService implements UserServiceInterface
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
         try {
             $response = $this->httpWrapper->get('/user', $request, $headers);
-            $this->httpWrapper->handleJsonResponse($response);
+            $this->responseHandler->handleJsonResponse($response);
             $response = $this->httpWrapper->decrypt($response, $request->date);
             $cleanedResponse = substr($response, stripos($response, "result") - 1);
             $cleanedResponse = "{" . $cleanedResponse;

@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Contracts\ApiResponseHandlerInterface;
 use App\Contracts\AttachmentServiceInterface;
 use App\Contracts\HttpWrapperInterface;
 use App\Contracts\UserServiceInterface;
+use App\Helpers\ApiResponseHandler;
 use App\Services\AttachmentService;
 use App\Services\HttpWrapper;
 use App\Services\UserService;
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(HttpWrapperInterface::class, HttpWrapper::class);
         $this->app->bind(AttachmentServiceInterface::class, AttachmentService::class);
+        $this->app->bind(ApiResponseHandlerInterface::class, ApiResponseHandler::class);
 
     }
 

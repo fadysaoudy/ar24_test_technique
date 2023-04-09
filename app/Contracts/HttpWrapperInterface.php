@@ -31,19 +31,14 @@ interface HttpWrapperInterface
      */
     public function get(string $endpoint, UserGetRequest $data, array $headers);
 
-    /**
-     * @throws Exception
-     */
-    public function post(string $endpoint, $request, array $headers): string;
 
     public static function makeSignature(string $date): bool|string;
 
     public function decrypt(string $encryptedContent, string $date): string;
 
-    public function getExceptionMessage(string $slug): TokenErrorEnum|null|UserErrorEnum|DateErrorEnum;
 
     public function prepareQuery($request): array;
 
-    public function handleJsonResponse($responseBody);
-    public function postAttachment($endpoint, $request, array $headers): string;
+
+    public function post(string $endpoint,object $request, array $headers, bool $isMultipart = false);
 }

@@ -18,7 +18,7 @@
             <div class="mb-3">
                 <label for="firstname" class="form-label">First Name <span class="text-danger">*</span></label>
 {{--                <input type="text" class="form-control @error('firstname') is-invalid @enderror"  name="firstname" id="firstname" value="{{ old('firstname') }}" required>--}}
-                <input type="text" class="form-control "  name="firstname" id="firstname"  required>
+                <input type="text" class="form-control  @error('firstname') is-invalid @enderror"  name="firstname" id="firstname"   value="{{ old('firstname') }}" required>
             </div>
             <div class="mb-3">
                 <label for="lastname" class="form-label">Last Name <span class="text-danger">*</span></label>
@@ -42,7 +42,7 @@
             </div>
             <div class="mb-3">
                 <label for="statut" class="form-label  " >Status <span class="text-danger">*</span></label>
-                <select class="form-select @error('statut') is-invalid @enderror" id="statut" name="statut"    >
+                <select class="form-select @error('statut') is-invalid @enderror" id="statut" name="statut">
                     <option value=""></option>
                     <option value="particulier">Particulier</option>
                     <option value="professionnel">Professionnel</option>
@@ -87,7 +87,7 @@
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
-                <input type="password" name="password"  min="8" class="form-control @error('password') is-invalid @enderror " value="{{ old('password') }} " id="password" required>
+                <input type="password" name="password"  min="8" class="form-control @error('password') is-invalid @enderror " value="{{ old('password') }}" id="password" required>
             </div>
             <div class="mb-3">
                 <label for="confirmed" class="form-label">Ask email confirmation</label>
