@@ -3,26 +3,21 @@
 namespace App\Helpers;
 
 use App\Contracts\ApiResponseHandlerInterface;
-use App\Exceptions\AttachmentEmptyNameException;
-use App\Exceptions\AttachmentMissingFileException;
-use App\Exceptions\AttachmentToBigException;
-use App\Exceptions\UserAlreadyExistException;
-use App\Exceptions\UserNotFoundException;
-use App\Http\Data\Enum\AttachmentErrorEnum;
-use App\Http\Data\Enum\ContentErrorEnum;
-use App\Http\Data\Enum\DateErrorEnum;
-use App\Http\Data\Enum\EmailErrorEnum;
-use App\Http\Data\Enum\ResponseEnum;
-use App\Http\Data\Enum\TokenErrorEnum;
-use App\Http\Data\Enum\UserErrorEnum;
+use App\Enum\AttachmentErrorEnum;
+use App\Enum\ContentErrorEnum;
+use App\Enum\DateErrorEnum;
+use App\Enum\EmailErrorEnum;
+use App\Enum\ResponseEnum;
+use App\Enum\TokenErrorEnum;
+use App\Enum\UserErrorEnum;
 use Exception;
 
 class ApiResponseHandler implements ApiResponseHandlerInterface
 {
     /**
-     * @throws UserAlreadyExistException
+     * @param $responseBody
+     * @return void
      * @throws Exception
-     * @throws UserNotFoundException
      */
     public function handleJsonResponse($responseBody): void
     {
@@ -34,27 +29,6 @@ class ApiResponseHandler implements ApiResponseHandlerInterface
             if ($exceptionMessage == null) {
                 throw new Exception("Unknown error occurred");
             }
-
-            else if ($exceptionMessage == UserErrorEnum::USER_NOT_CREATED) {
-                throw new UserAlreadyExistException();
-            }
-            else if ($exceptionMessage == AttachmentErrorEnum::MISSING_USER_ID) {
-                throw new UserNotFoundException();
-            }
-            else if ($exceptionMessage == AttachmentErrorEnum::ATTACHMENT_EMPTY_NAME) {
-                throw new AttachmentEmptyNameException();
-            }
-            else if ($exceptionMessage == AttachmentErrorEnum::ATTACHMENT_MISSING_FILE) {
-                throw new AttachmentMissingFileException();
-            }
-            else if ($exceptionMessage == AttachmentErrorEnum::ATTACHMENT_TOO_BIG) {
-                throw new AttachmentToBigException();
-            }
-            else if ($exceptionMessage == UserErrorEnum::USER_NOT_EXIST) {
-                throw new UserNotFoundException();
-            }
-
-
             else {
                 throw new Exception($exceptionMessage->value);
             }
@@ -62,7 +36,7 @@ class ApiResponseHandler implements ApiResponseHandlerInterface
 
     }
 
-    public function getExceptionMessage(string $slug): TokenErrorEnum|UserErrorEnum|DateErrorEnum|string|null
+    public function getExceptionMessage(string $slug): TokenErrorEnum|UserErrorEnum|DateErrorEnum|AttachmentErrorEnum|EmailErrorEnum|string|null
     {
         return match ($slug) {
             'missing_firstname' => UserErrorEnum::MISSING_FIRSTNAME,
@@ -87,10 +61,9 @@ class ApiResponseHandler implements ApiResponseHandlerInterface
             'expired_date' => DateErrorEnum::EXPIRED_DATE,
             'date_in_future' => DateErrorEnum::DATE_IN_FUTURE,
             'empty_signature' => UserErrorEnum::EMPTY_SIGNATURE,
-            'missing_user_id' => UserErrorEnum::USER_NOT_EXIST,
+            'missing_user_id', 'user_not_exist' => UserErrorEnum::USER_NOT_EXIST,
             'user_account_not_confirmed' => UserErrorEnum::USER_ACCOUNT_NOT_CONFIRMED,
             'user_name_empty' => UserErrorEnum::USER_NAME_EMPTY,
-            'user_not_exist' => AttachmentErrorEnum::MISSING_USER_ID,
             'attachment_too_big' => AttachmentErrorEnum::ATTACHMENT_TOO_BIG,
             'attachment_empty_name' => AttachmentErrorEnum::ATTACHMENT_MISSING_FILE,
             'attachment_missing_file' => AttachmentErrorEnum::ATTACHMENT_EMPTY_NAME,

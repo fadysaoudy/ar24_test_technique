@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Data\Enum;
+namespace App\Enum;
 
 enum ResponseEnum: string
 {

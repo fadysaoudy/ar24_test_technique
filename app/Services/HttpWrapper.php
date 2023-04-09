@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Contracts\ApiResponseHandlerInterface;
 use App\Contracts\HttpWrapperInterface;
-use App\Http\Requests\DTO\User\UserGetRequest;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -76,18 +75,18 @@ class HttpWrapper implements HttpWrapperInterface
 
     /**
      * @param string $endpoint
-     * @param UserGetRequest $data
+     * @param object $request
      * @param array $headers
      * @return string
      * @throws GuzzleException
      */
 
-    public function get(string $endpoint, UserGetRequest $data, array $headers): string
+    public function get(string $endpoint, object $request, array $headers): string
     {
-        $params = $this->prepareQuery($data);
+        $params = $this->prepareQuery($request);
 
         $client = new Client();
-        $signature = $this->makeSignature($data->date);
+        $signature = $this->makeSignature($request->date);
 
         $options = [
             'headers' => ['signature' => $signature] + $headers,
@@ -101,8 +100,9 @@ class HttpWrapper implements HttpWrapperInterface
             'timeout' => $options['timeout'],
             'verify' => $options['verify'],
         ]);
+        $this->responseHandler->handleJsonResponse($response->getBody());
 
-        return $response->getBody()->getContents();
+        return $this->decrypt($response->getBody(), $request->date);
     }
 
 
@@ -140,16 +140,19 @@ class HttpWrapper implements HttpWrapperInterface
     }
 
 
-
-
-
-
     private function buildMultipartRequest( $request): array
     {
         $multipart = [];
 
         foreach ($request as $key => $value) {
-            if ($key === 'file') {
+            if (is_array($value) && $key === 'attachment') {
+                foreach ($value as $index => $attachmentValue) {
+                    $multipart[] = [
+                        'name' => 'attachment[' . $index . ']',
+                        'contents' => $attachmentValue
+                    ];
+                }
+            } elseif ($key === 'file') {
                 $multipart[] = [
                     'name' => 'file',
                     'contents' => fopen($value, 'r')
@@ -168,14 +171,12 @@ class HttpWrapper implements HttpWrapperInterface
 
     public function prepareQuery($request): array
     {
+        $query = [];
+        foreach ($request as $key => $value) {
 
-        $id_user = $request->user_id;
-        $email = $request->email;
-        $query['token'] = $this->token;
-        $query['date'] = $request->date;
-        $query['id_user'] = $id_user;
-        $query['email'] = $email;
+            $query[$key] = $value;
 
+        }
         return $query;
     }
 
@@ -193,7 +194,6 @@ class HttpWrapper implements HttpWrapperInterface
         $iv = mb_strcut(hash(static::HASH_ALGO, $this->api_secret), 0, 16, 'UTF-8');
 
         $content = openssl_decrypt($encryptedContent, static::CIPHER_ALGO, $key, false, $iv);
-
         return $content !== false ? $content : '';
     }
 

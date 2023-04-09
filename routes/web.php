@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('layouts.app');
-});
+})->name('app.home');
 Route::prefix('user')->group(function () {
     //    user info
     Route::get('/', [UsersController::class, 'index'])->name('user.index');
@@ -35,6 +35,8 @@ Route::prefix('user')->group(function () {
     Route::group(['prefix' => 'email'], function () {
         Route::post('/', [EmailController::class, 'store'])->name('email.store');
         Route::get('/', [EmailController::class, 'index'])->name('email.index');
+        Route::get('/show', [EmailController::class, 'show'])->name('email.show');
+        Route::get('/get', [EmailController::class, 'getEmailInfo'])->name('email.get');
     });
 
 
