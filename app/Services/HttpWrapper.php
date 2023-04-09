@@ -123,29 +123,13 @@ class HttpWrapper implements HttpWrapperInterface
 
         if ($isMultipart) {
             $response = $client->post($this->baseUrl . $endpoint, [
-                'multipart' => [
-                    [
-                        'name' => 'token',
-                        'contents' => $this->token
-                    ],
-                    [
-                        'name' => 'date',
-                        'contents' => $request->date
-                    ],
-                    [
-                        'name' => 'id_user',
-                        'contents' => $request->id_user
-                    ],
-                    [
-                        'name' => 'file',
-                        'contents' => fopen($request->file, 'r')
-                    ]
-                ],
+                'multipart' => $this->buildMultipartRequest($request),
                 'headers' => [
                     'signature' => $signature
                 ]
 
             ]);
+
             $this->responseHandler->handleJsonResponse($response->getBody());
         } else {
             $options['body'] = http_build_query($request);
@@ -153,6 +137,32 @@ class HttpWrapper implements HttpWrapperInterface
             $response = $client->post($this->baseUrl . $endpoint, $options);
         }
         return $this->decrypt($response->getBody(), $request->date);
+    }
+
+
+
+
+
+
+    private function buildMultipartRequest( $request): array
+    {
+        $multipart = [];
+
+        foreach ($request as $key => $value) {
+            if ($key === 'file') {
+                $multipart[] = [
+                    'name' => 'file',
+                    'contents' => fopen($value, 'r')
+                ];
+            } else {
+                $multipart[] = [
+                    'name' => $key,
+                    'contents' => $value
+                ];
+            }
+        }
+
+        return $multipart;
     }
 
 

@@ -19,6 +19,7 @@ class AttachmentUploadRequest extends Data
 
     public function __construct(
 
+        public? string $token,
         public ?string $date,
         public ?string $id_user,
         #[File]
@@ -31,7 +32,7 @@ class AttachmentUploadRequest extends Data
 
         $this->id_user = config('ar24.ar24_user_id');
         $this->date = Carbon::now()->addHours(2)->format('Y-m-d H:i:s');
-
+        $this->token = config('ar24.ar24_token');
     }
 
     public function toArray(): array
@@ -41,6 +42,7 @@ class AttachmentUploadRequest extends Data
 
         $data['id_user'] = $this->id_user;
         $data['date'] = $this->date;
+        $data['token'] = $this->token;
         return $data;
     }
 

@@ -21,6 +21,10 @@ enum UserErrorEnum: string
     case USER_UNAVAILABLE = 'user_unavailable';
     case EMPTY_SIGNATURE = 'empty_signature';
     case USER_NOT_EXIST = 'user_not_exist';
+    case USER_ACCOUNT_NOT_CONFIRMED = 'user_account_not_confirmed';
+    case USER_NAME_EMPTY = 'user_name_empty';
+    case USER_EULA_NOT_ACCEPTED = 'Sender must accept AR24 EULA first';
+    case USER_NO_PAYMENT = 'User or Master has no payment method';
 
 
 }

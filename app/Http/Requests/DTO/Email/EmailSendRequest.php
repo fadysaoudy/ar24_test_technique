@@ -8,7 +8,7 @@ use Spatie\LaravelData\Data;
 class EmailSendRequest extends Data
 {
     public function __construct(
-
+        public? string $token,
         public ?string $id_user,
         public bool    $eidas,
         public ?string  $custom_name_sender,
@@ -35,6 +35,8 @@ class EmailSendRequest extends Data
         if ($attachment !== null) {
             $this->attachment = array_map('intval', explode(',', $attachment));
         }
+        $this->token = config('ar24.ar24_token');
+
     }
 
     public function toArray(): array
@@ -43,6 +45,7 @@ class EmailSendRequest extends Data
         $data = parent::toArray();
 
         $data['date'] = $this->date;
+        $data['token'] = $this->token;
         $data['id_user'] = $this->id_user;
         return $data;
     }
