@@ -76,10 +76,6 @@ class UserCreateRequest  extends Data
         $data['date'] = $this->date;
         return $data;
     }
-    public function getEmail():string
-    {
-        return $this->email;
-    }
 
 
     public static function rules(): array

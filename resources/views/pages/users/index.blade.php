@@ -132,7 +132,7 @@
                 <input type="text" class="form-control" disabled id="is_legal_entity" name="is_legal_entity"
                        value="{{$user->is_legal_entity  ? 'Yes' : 'No'}}">
             </div>
-
+@dump($user->id)
         </form>
     </div>
 @endsection

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Data\Enum;
+namespace App\Enum;
 
 enum UserErrorEnum: string
 {
@@ -18,9 +18,9 @@ enum UserErrorEnum: string
     case MISSING_COMPANY_TVA = 'missing_company_tva';
     case ERROR_COMPANY_SIRET = 'error_company_siret';
     case USER_NOT_CREATED = 'user_not_created';
-    case USER_UNAVAILABLE = 'user_unavailable';
+    case USER_UNAVAILABLE = 'You tried to access a resource that is not related to your API (user has not granted API access)';
     case EMPTY_SIGNATURE = 'empty_signature';
-    case USER_NOT_EXIST = 'user_not_exist';
+    case USER_NOT_EXIST = 'There is no user with this address on AR24';
     case USER_ACCOUNT_NOT_CONFIRMED = 'user_account_not_confirmed';
     case USER_NAME_EMPTY = 'user_name_empty';
     case USER_EULA_NOT_ACCEPTED = 'Sender must accept AR24 EULA first';

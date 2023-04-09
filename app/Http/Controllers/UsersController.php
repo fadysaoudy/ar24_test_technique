@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\UserServiceInterface;
-use App\Exceptions\UserAlreadyExistException;
-use App\Exceptions\UserNotFoundException;
 use App\Http\Requests\DTO\User\UserCreateRequest;
 use App\Http\Requests\DTO\User\UserGetRequest;
 use App\Providers\RouteServiceProvider;
@@ -48,10 +46,8 @@ class UsersController extends Controller
         try {
             $user = $this->userService->get($request);
             return view('pages.users.index', ['user' => $user]);
-        } catch (UserNotFoundException $e) {
-            return view('errors.user.user_errors', ['message' => $e->getMessage()]);
         } catch (Exception $e) {
-            return view('errors.user.user_errors', ['message' => 'An error occurred while processing your request. Please try again later.']);
+            return view('errors.user.user_errors', ['message' => $e->getMessage()]);
         }
 
     }
@@ -66,11 +62,8 @@ class UsersController extends Controller
         try {
 
         $this->userService->store($request);
-        } catch (UserAlreadyExistException $e) {
-            return view('errors.user.user_errors', ['message' => $e->getMessage()]);
-
         } catch (Exception $e) {
-            return view('errors.user.user_errors', ['message' => 'An error occurred while processing your request. Please try again later.']);
+            return view('errors.user.user_errors', ['message' => $e->getMessage()]);
 
         }
 

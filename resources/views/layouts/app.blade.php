@@ -21,7 +21,8 @@
     @yield('user_form')
     @yield('upload_document_form')
     @yield('user_not_found')
-     @yield('send_email_form')
+    @yield('send_email_form')
+    @yield('show_email_info_form')
 
 </main>
 @include('partials.footer')

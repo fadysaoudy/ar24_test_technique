@@ -2,10 +2,6 @@
 
 namespace App\Contracts;
 
-use App\Http\Data\Enum\DateErrorEnum;
-use App\Http\Data\Enum\TokenErrorEnum;
-use App\Http\Data\Enum\UserErrorEnum;
-use App\Http\Requests\DTO\User\UserGetRequest;
 use Exception;
 
 interface HttpWrapperInterface
@@ -29,7 +25,7 @@ interface HttpWrapperInterface
     /**
      * @throws Exception
      */
-    public function get(string $endpoint, UserGetRequest $data, array $headers);
+    public function get(string $endpoint, object $request, array $headers);
 
 
     public static function makeSignature(string $date): bool|string;
