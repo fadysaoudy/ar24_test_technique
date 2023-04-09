@@ -61,7 +61,7 @@ class ApiResponseHandler implements ApiResponseHandlerInterface
 
     }
 
-    public function getExceptionMessage(string $slug): TokenErrorEnum|UserErrorEnum|DateErrorEnum|null
+    public function getExceptionMessage(string $slug): TokenErrorEnum|UserErrorEnum|DateErrorEnum|string|null
     {
         return match ($slug) {
             'missing_firstname' => UserErrorEnum::MISSING_FIRSTNAME,
