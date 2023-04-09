@@ -18,7 +18,6 @@
             <div class="form-group pb-4">
                 <label class="form-label" for="customFile">Upload Document</label>
                 <input type="file" class="form-control" id="customFile" name="file"/>
-                <input type="text" class="form-control" id="customFile" name="id_user" value=60800  />
             </div>
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>

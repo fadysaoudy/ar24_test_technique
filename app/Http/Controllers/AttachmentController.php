@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DTO\Attachment\AttachmentUploadRequest;
+use App\Providers\RouteServiceProvider;
 use App\Services\AttachmentService;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Session;
 
 class AttachmentController extends Controller
 {
@@ -15,16 +21,30 @@ class AttachmentController extends Controller
     )
     {
     }
+
+    /**
+     * @return View
+     */
     public function index(): View
     {
         return view('pages.users.attachment.index');
     }
 
     /**
-     * @throws \Exception
+     * @param AttachmentUploadRequest $request
+     * @return View|RedirectResponse
      */
-    public function store(AttachmentUploadRequest $request)
+    public function store(AttachmentUploadRequest $request): View|RedirectResponse
     {
-        return $this->attachmentService->store($request);
+        try {
+            $this->attachmentService->store($request);
+        } catch (Exception $e) {
+            return view('errors.user.user_errors', ['message' => $e->getMessage()]);
+
+        }
+        Queue::later(10, function () {
+            Session::forget('success');
+        });
+        return redirect()->intended(RouteServiceProvider::HOME)->with('success', 'File Uploaded Successfully.');
     }
 }
