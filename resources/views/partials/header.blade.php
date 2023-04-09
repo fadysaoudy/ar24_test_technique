@@ -20,7 +20,7 @@
                     <a class="nav-link" href="{{route('attachment.index')}}">Upload Document</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Get Info by mail</a>
+                    <a class="nav-link" href="{{route('email.index')}}">Send Email</a>
                 </li>
             </ul>
         </div>

@@ -9,7 +9,9 @@ use App\Exceptions\AttachmentToBigException;
 use App\Exceptions\UserAlreadyExistException;
 use App\Exceptions\UserNotFoundException;
 use App\Http\Data\Enum\AttachmentErrorEnum;
+use App\Http\Data\Enum\ContentErrorEnum;
 use App\Http\Data\Enum\DateErrorEnum;
+use App\Http\Data\Enum\EmailErrorEnum;
 use App\Http\Data\Enum\ResponseEnum;
 use App\Http\Data\Enum\TokenErrorEnum;
 use App\Http\Data\Enum\UserErrorEnum;
@@ -29,7 +31,6 @@ class ApiResponseHandler implements ApiResponseHandlerInterface
 
         if ($jsonContent != null && $jsonContent->status == ResponseEnum::Error->value) {
             $exceptionMessage = $this->getExceptionMessage($jsonContent->slug);
-
             if ($exceptionMessage == null) {
                 throw new Exception("Unknown error occurred");
             }
@@ -87,10 +88,22 @@ class ApiResponseHandler implements ApiResponseHandlerInterface
             'date_in_future' => DateErrorEnum::DATE_IN_FUTURE,
             'empty_signature' => UserErrorEnum::EMPTY_SIGNATURE,
             'missing_user_id' => UserErrorEnum::USER_NOT_EXIST,
+            'user_account_not_confirmed' => UserErrorEnum::USER_ACCOUNT_NOT_CONFIRMED,
+            'user_name_empty' => UserErrorEnum::USER_NAME_EMPTY,
             'user_not_exist' => AttachmentErrorEnum::MISSING_USER_ID,
             'attachment_too_big' => AttachmentErrorEnum::ATTACHMENT_TOO_BIG,
             'attachment_empty_name' => AttachmentErrorEnum::ATTACHMENT_MISSING_FILE,
-            'ATTACHMENT_MISSING_FILE' => AttachmentErrorEnum::ATTACHMENT_EMPTY_NAME,
+            'attachment_missing_file' => AttachmentErrorEnum::ATTACHMENT_EMPTY_NAME,
+            'same_sender_recipient_emails' => EmailErrorEnum::SAME_SENDER_RECIPIENT_EMAILS,
+            'invalid_recipient' => EmailErrorEnum::INVALID_RECIPIENT,
+            'invalid_email' => EmailErrorEnum::INVALID_EMAIL,
+            'user_eula_not_accepted' => UserErrorEnum::USER_EULA_NOT_ACCEPTED,
+            'attachment_not_exists' => AttachmentErrorEnum ::ATTACHMENT_NOT_EXISTS,
+            'attachment_unavailable' => AttachmentErrorEnum ::ATTACHMENT_UNAVAILABLE,
+            'content_exceeds_limit' => ContentErrorEnum ::CONTENT_EXCEEDS_LIMIT,
+            'forbidden_html' => ContentErrorEnum ::FORBIDDEN_HTML,
+            'error_no_content_no_attachment' => ContentErrorEnum ::ERROR_NO_CONTENT_NO_ATTACHMENT,
+
             default => null,
         };
     }
