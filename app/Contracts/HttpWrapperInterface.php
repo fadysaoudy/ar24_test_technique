@@ -28,7 +28,7 @@ interface HttpWrapperInterface
     public function get(string $endpoint, object $request, array $headers);
 
 
-    public static function makeSignature(string $date): bool|string;
+    public static function makeSignature(string $date):string;
 
     public function decrypt(string $encryptedContent, string $date): string;
 

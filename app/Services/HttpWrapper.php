@@ -180,7 +180,7 @@ class HttpWrapper implements HttpWrapperInterface
         return $query;
     }
 
-    public static function makeSignature($date): bool|string
+    public static function makeSignature($date):string
     {
         $privateKey = config('ar24.ar24_key');
         $hashedPrivateKey = hash('sha256', $privateKey);
